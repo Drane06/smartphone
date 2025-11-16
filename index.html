@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mission Smartphone – Impact environnemental</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --font-title: 'Poppins', sans-serif;
+            --font-body: 'Lato', sans-serif;
+            --color-bg: #f1f5f9;
+            --color-surface: #ffffff;
+            --color-text: #1e293b;
+            --color-muted: #64748b;
+            --color-primary: #0284c7; /* Bleu ciel */
+            --color-primary-light: #e0f2fe;
+            --color-success: #16a34a; /* Vert */
+            --color-success-light: #f0fdf4;
+            --color-danger: #dc2626; /* Rouge */
+            --color-danger-light: #fef2f2;
+            --shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--color-surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        header {
+            padding: 24px 32px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        header h1 {
+            font-family: var(--font-title);
+            font-size: 28px;
+            color: var(--color-text);
+        }
+
+        header p {
+            font-size: 16px;
+            color: var(--color-muted);
+            margin-top: 4px;
+        }
+
+        .progress-bar-container {
+            background-color: #e2e8f0;
+            height: 8px;
+            border-radius: 99px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background-color: var(--color-primary);
+            transition: width 0.4s ease;
+        }
+
+        main {
+            padding: 32px;
+        }
+
+        .mission-step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .mission-step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .mission-step h2 {
+            font-family: var(--font-title);
+            font-size: 22px;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+        }
+
+        .mission-step h3 {
+            font-family: var(--font-title);
+            font-size: 18px;
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+
+        .mission-step p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        /* --- Styles des boutons --- */
+        .btn {
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 15px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0369a1; /* Bleu plus foncé */
+        }
+
+        .btn-primary:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background-color: #cbd5e1;
+        }
+
+        .btn-check {
+            background-color: var(--color-success);
+            color: white;
+        }
+        .btn-check:hover {
+            background-color: #15803d;
+        }
+
+        .navigation {
+            padding: 20px 32px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            background-color: #f8fafc;
+        }
+
+        /* --- Styles des feedbacks --- */
+        .feedback-box {
+            display: none;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 15px;
+            border-width: 1px;
+            border-style: solid;
+            animation: fadeIn 0.3s;
+        }
+
+        .feedback-box.correct {
+            background-color: var(--color-success-light);
+            border-color: var(--color-success);
+            color: #14532d;
+        }
+
+        .feedback-box.incorrect {
+            background-color: var(--color-danger-light);
+            border-color: var(--color-danger);
+            color: #991b1b;
+        }
+         .feedback-box.info {
+            background-color: var(--color-primary-light);
+            border-color: var(--color-primary);
+            color: #0c4a6e;
+        }
+
+        .feedback-box strong {
+            font-weight: 700;
+        }
+        .feedback-box p {
+            font-size: 15px;
+            margin: 0;
+        }
+
+        /* --- Mission 1 & 2 : Drag & Drop --- */
+        .dnd-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        .dnd-list {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            min-height: 100px;
+        }
+        .dnd-list h3 {
+            margin-top: 0;
+        }
+        .dnd-item {
+            background-color: var(--color-surface);
+            border: 1px solid #cbd5e1;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: grab;
+            font-size: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .dnd-item:last-child {
+            margin-bottom: 0;
+        }
+        .dnd-item.dragging {
+            opacity: 0.5;
+        }
+        .dnd-list.drag-over {
+            border-style: dashed;
+            border-color: var(--color-primary);
+            background-color: var(--color-primary-light);
+        }
+        .dnd-item .hint {
+            font-size: 12px;
+            color: var(--color-muted);
+            background-color: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* --- Mission 3 : Associations --- */
+        .pairs-container {
+            display: grid;
+            gap: 12px;
+        }
+        .pair-item {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 16px;
+        }
+        .pair-item select {
+            font-family: var(--font-body);
+            font-size: 15px;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            max-width: 100%;
+            width: 100%;
+        }
+        .pair-item p {
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        #goodPracticesList ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 12px;
+        }
+        #goodPracticesList li {
+            font-size: 14px;
+            color: var(--color-muted);
+            padding: 8px;
+            background-color: var(--color-surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        /* --- Mission 4 & 5 : Quiz --- */
+        .quiz-container {
+            display: grid;
+            gap: 12px;
+        }
+        .quiz-question {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .quiz-question p {
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        .quiz-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .quiz-option {
+            background-color: var(--color-surface);
+            border: 1px solid #cbd5e1;
+            padding: 8px 14px;
+            border-radius: 99px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .quiz-option:hover {
+            background-color: #f1f5f9;
+        }
+        .quiz-option.selected {
+            background-color: var(--color-primary-light);
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            font-weight: 700;
+        }
+
+        /* --- Écran Final --- */
+        .results-screen {
+            text-align: center;
+        }
+        .results-score {
+            font-family: var(--font-title);
+            font-size: 72px;
+            color: var(--color-primary);
+            margin: 20px 0;
+        }
+        .results-score span {
+            font-size: 24px;
+            color: var(--color-muted);
+        }
+
+        /* --- Styles d'impression --- */
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+                margin: 0;
+            }
+            .app {
+                box-shadow: none;
+                border: none;
+                width: 100%;
+                max-width: 100%;
+                border-radius: 0;
+            }
+            main {
+                padding: 0;
+            }
+            header {
+                border-bottom: 2px solid #000;
+            }
+            header h1 {
+                font-size: 24pt;
+            }
+            .navigation, .progress-bar-container, .btn, .dnd-item .hint, .dnd-item i {
+                display: none;
+            }
+            .mission-step {
+                display: block !important;
+                page-break-after: always;
+                padding: 20px;
+            }
+            .mission-step:last-child {
+                page-break-after: avoid;
+            }
+            .dnd-container {
+                grid-template-columns: 1fr;
+            }
+            .dnd-list, .pair-item, .quiz-question {
+                background-color: #f8fafc;
+                border: 1px solid #ccc;
+            }
+            .feedback-box {
+                display: block !important; /* Afficher les corrections */
+            }
+            .results-screen {
+                text-align: left;
+            }
+            .results-score {
+                font-size: 32pt;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app">
+        <header>
+            <h1>🌍 Mission Smartphone</h1>
+            <p>Découvrez l'impact de votre téléphone et apprenez les bons gestes.</p>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Étape 0: Accueil -->
+            <div class="mission-step active" data-mission="0">
+                <h2>Bienvenue dans la Mission Smartphone</h2>
+                <p>
+                    Vous allez parcourir 5 missions pour comprendre le cycle de vie de votre téléphone,
+                    les matériaux qui le composent, et les gestes pour réduire son impact.
+                </p>
+                <p>
+                    Vous répondrez à chaque question, vérifierez la correction, puis passerez à la suite.
+                    Un score final sur 20 vous sera attribué.
+                </p>
+                <p>Cliquez sur "Commencer" pour démarrer la première mission.</p>
+            </div>
+
+            <!-- Étape 1: Cycle de vie -->
+            <div class="mission-step" data-mission="1">
+                <h2>Mission 1 : Cycle de vie (sur 4 points)</h2>
+                <p>Classez ces 5 étapes de la vie d'un smartphone, de la <strong>plus polluante</strong> à la <strong>moins polluante</strong>. Faites glisser les étapes pour les ordonner.</p>
+                <div class="dnd-container">
+                    <div class="dnd-list" id="stepsContainer">
+                        <!-- Généré par JS -->
+                    </div>
+                </div>
+                <button class="btn btn-check" id="checkOrderBtn">
+                    <i class="fa-solid fa-check"></i> Vérifier l'ordre
+                </button>
+                <div class="feedback-box" id="orderFeedback"></div>
+            </div>
+
+            <!-- Étape 2: Matériaux -->
+            <div class="mission-step" data-mission="2">
+                <h2>Mission 2 : Matériaux cachés (sur 6 points)</h2>
+                <p>Parmi cette liste, glissez <strong>3 matériaux</strong> qu'on trouve VRAIMENT dans un smartphone dans la boîte "Dans le smartphone".</p>
+                <div class="dnd-container" style="grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="dnd-list" id="materialsPool">
+                        <h3>Matériaux disponibles</h3>
+                        <!-- Généré par JS -->
+                    </div>
+                    <div class="dnd-list" id="materialsSmartphone">
+                        <h3>📱 Dans le smartphone</h3>
+                        <!-- Zone de dépôt -->
+                    </div>
+                </div>
+                <button class="btn btn-check" id="checkMaterialsBtn">
+                    <i class="fa-solid fa-check"></i> Vérifier les matériaux
+                </button>
+                <div class="feedback-box" id="materialsFeedback"></div>
+            </div>
+
+            <!-- Étape 3: Gestes du quotidien -->
+            <div class="mission-step" data-mission="3">
+                <h2>Mission 3 : Bonnes ou Mauvaises Pratiques ? (sur 5 points)</h2>
+                <p>Glissez chaque pratique de la zone "À trier" dans la bonne colonne (Bonne ou Mauvaise).</p>
+                
+                <div class="dnd-list" id="habitsPool" style="margin-bottom: 16px;">
+                    <h3>Pratiques à trier</h3>
+                    <!-- Généré par JS -->
+                </div>
+                
+                <div class="dnd-container" style="grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="dnd-list" id="goodHabitsBox" data-type="good">
+                        <h3 style="color: var(--color-success);">👍 Bonnes Pratiques</h3>
+                    </div>
+                    <div class="dnd-list" id="badHabitsBox" data-type="bad">
+                        <h3 style="color: var(--color-danger);">👎 Mauvaises Pratiques</h3>
+                    </div>
+                </div>
+
+                <button class="btn btn-check" id="checkHabitsBtn">
+                    <i class="fa-solid fa-check"></i> Vérifier le tri
+                </button>
+                <div class="feedback-box" id="habitsFeedback"></div>
+            </div>
+
+            <!-- Étape 4: Profil d'usage (Bonus) -->
+            <div class="mission-step" data-mission="4">
+                <h2>Mission 4 : Ton profil d'usage (Titre indicatif - 0 points)</h2>
+                <p>Répondez honnêtement à ce questionnaire. Il n'y a pas de bonne réponse et cette mission ne donne pas de points.</p>
+                <div class="quiz-container" id="quizContainer">
+                    <!-- Généré par JS -->
+                </div>
+                <button class="btn btn-check" id="computeScoreBtn">
+                    <i class="fa-solid fa-calculator"></i> Calculer mon profil
+                </button>
+                 <div class="feedback-box" id="scoreFeedback"></div>
+            </div>
+
+            <!-- Étape 5: Vrai/Faux -->
+            <div class="mission-step" data-mission="5">
+                <h2>Mission 5 : Vrai ou Faux ? (sur 5 points)</h2>
+                <p>Répondez par Vrai ou Faux à ces affirmations.</p>
+                <div class="quiz-container" id="vfContainer">
+                    <!-- Généré par JS -->
+                </div>
+                <button class="btn btn-check" id="checkVfBtn">
+                    <i class="fa-solid fa-check"></i> Vérifier le Vrai/Faux
+                </button>
+                <div class="feedback-box" id="vfFeedback"></div>
+            </div>
+
+            <!-- Étape 6: Résultats -->
+            <div class="mission-step results-screen" data-mission="6">
+                <h2>Mission accomplie !</h2>
+                <p>Voici votre score final basé sur vos réponses aux missions.</p>
+                <div class="results-score">
+                    <span id="finalScore">0</span><span> / 20</span>
+                </div>
+                <p id="finalMessage" style="font-weight: 700; font-size: 18px;"></p>
+                <p>Le geste le plus important à retenir : <strong>garder son smartphone le plus longtemps possible</strong> est le moyen le plus efficace de réduire son impact environnemental.</p>
+                <button class="btn btn-primary" id="printBtn">
+                    <i class="fa-solid fa-print"></i> Imprimer mes résultats (PDF)
+                </button>
+            </div>
+        </main>
+
+        <div class="navigation">
+            <button class="btn btn-secondary" id="prevBtn" disabled>
+                <i class="fa-solid fa-arrow-left"></i> Précédent
+            </button>
+            <button class="btn btn-primary" id="nextBtn">
+                Commencer <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- VARIABLES GLOBALES ---
+            let currentStep = 0;
+            const totalSteps = 7; // 0 (Accueil) + 5 Missions + 1 (Résultats)
+            const scores = {
+                mission1: 0,
+                mission2: 0,
+                mission3: 0,
+                mission4: 0, // Bonus
+                mission5: 0
+            };
+
+            const steps = document.querySelectorAll('.mission-step');
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const progressBar = document.getElementById('progressBar');
+
+            // --- DONNÉES DES MISSIONS ---
+
+            // Mission 1
+            const stepsData = [
+                { id: 'fabrication', label: 'Fabrication de l’appareil (usines, assemblage, énergie)' },
+                { id: 'extraction', label: 'Extraction des matières premières (mines, métaux rares)' },
+                { id: 'transport', label: 'Transport mondial (bateaux, camions, avions)' },
+                { id: 'usage', label: 'Usage au quotidien (recharges, données, réseau)' },
+                { id: 'fin_vie', label: 'Fin de vie (recyclage, déchets électroniques)' }
+            ];
+            const correctOrder = ['fabrication', 'extraction', 'transport', 'usage', 'fin_vie'];
+            const stepsContainer = document.getElementById('stepsContainer');
+
+            // Mission 2
+            const materialsData = [
+                { id: 'lithium', name: 'Lithium', inPhone: true },
+                { id: 'cobalt', name: 'Cobalt', inPhone: true },
+                { id: 'cuivre', name: 'Cuivre', inPhone: true },
+                { id: 'or', name: 'Or', inPhone: true },
+                { id: 'argent', name: 'Argent', inPhone: true },
+                { id: 'silicium', name: 'Silicium', inPhone: true },
+                { id: 'aluminium', name: 'Aluminium', inPhone: true },
+                { id: 'plastique', name: 'Plastique', inPhone: true },
+                { id: 'fer', name: 'Fer', inPhone: false },
+                { id: 'plomb', name: 'Plomb', inPhone: false }
+            ];
+            const materialsPool = document.getElementById('materialsPool');
+            const materialsSmartphone = document.getElementById('materialsSmartphone');
+
+            // Mission 3
+            const habitsData = [
+                { id: 'h1', text: 'Garder son smartphone le plus longtemps possible.', type: 'good' },
+                { id: 'h2', text: 'Laisser son téléphone en charge toute la nuit.', type: 'bad' },
+                { id: 'h3', text: 'Trier et supprimer régulièrement les fichiers inutiles.', type: 'good' },
+                { id: 'h4', text: 'Changer de smartphone dès qu’un nouveau modèle sort.', type: 'bad' },
+                { id: 'h5', text: 'Désactiver le GPS et le Bluetooth inutilisés.', type: 'good' }
+            ];
+            const habitsPool = document.getElementById('habitsPool');
+
+            // Mission 4
+            const quizQuestions = [
+                { id: 'age', title: "Âge de ton smartphone actuel ?", options: [
+                    { id: 'moins-1', label: 'Moins d’un an', score: 0 },
+                    { id: '1-2', label: 'Entre 1 et 2 ans', score: 0 },
+                    { id: '2-4', label: 'Entre 2 et 4 ans', score: 1 },
+                    { id: 'plus-4', label: 'Plus de 4 ans', score: 2 }]
+                },
+                { id: 'remplacement', title: "Raison principale pour changer de smartphone ?", options: [
+                    { id: 'mode', label: 'Pour avoir un modèle plus “à la mode”', score: 0 },
+                    { id: 'lent', label: 'Parce qu’il devient lent / batterie usée', score: 1 },
+                    { id: 'panne', label: 'Parce qu’il est vraiment en panne', score: 2 }]
+                }
+            ];
+            const quizContainer = document.getElementById('quizContainer');
+
+            // Mission 5
+            const vfQuestions = [
+                { id: 'vf1', text: 'La fabrication d’un smartphone consomme plus de ressources que toutes ses recharges pendant sa vie.', correct: 'vrai' },
+                { id: 'vf2', text: 'Regarder une vidéo en streaming ou téléchargée consomme autant.', correct: 'faux' },
+                { id: 'vf3', text: 'Recycler un smartphone permet de récupérer 100% des métaux.', correct: 'faux' },
+                { id: 'vf4', text: 'Garder son smartphone plus longtemps est le geste n°1 pour l\'environnement.', correct: 'vrai' },
+                { id: 'vf5', text: 'Un smartphone contient des matériaux extraits sur plusieurs continents.', correct: 'vrai' }
+            ];
+            const vfContainer = document.getElementById('vfContainer');
+
+
+            // --- FONCTIONS DE NAVIGATION ---
+
+            function showStep(stepNumber) {
+                steps.forEach((step, index) => {
+                    step.classList.toggle('active', index === stepNumber);
+                });
+
+                // Mettre à jour la barre de progression
+                // On se base sur le nombre de missions (totalSteps - 1)
+                progressBar.style.width = `${(stepNumber / (totalSteps - 1)) * 100}%`;
+
+                // Logique des boutons de navigation
+                prevBtn.disabled = (stepNumber === 0);
+                
+                // Désactiver "Suivant" par défaut, sauf à l'accueil
+                nextBtn.disabled = (stepNumber > 0 && stepNumber < totalSteps - 1);
+                
+                if (stepNumber === 0) {
+                    nextBtn.innerHTML = 'Commencer <i class="fa-solid fa-arrow-right"></i>';
+                    nextBtn.disabled = false;
+                } else if (stepNumber === totalSteps - 1) { // Écran des résultats
+                    nextBtn.style.display = 'none';
+                    prevBtn.style.display = 'none';
+                } else if (stepNumber === totalSteps - 2) { // Dernière mission (V/F)
+                    nextBtn.innerHTML = 'Voir mon score <i class="fa-solid fa-trophy"></i>';
+                } else { // <-- BLOC ELSE MANQUANT AJOUTÉ
+                    nextBtn.innerHTML = 'Suivant <i class="fa-solid fa-arrow-right"></i>';
+                    nextBtn.style.display = 'block';
+                }
+
+                // Vérifier si l'étape a déjà été validée pour ré-activer "Suivant"
+                const missionKey = `mission${stepNumber}`;
+                if (scores.hasOwnProperty(missionKey)) {
+                    // Logique corrigée pour trouver le bon feedback pour chaque mission
+                    let feedbackEl = null;
+                    if (stepNumber === 1) feedbackEl = document.getElementById('orderFeedback');
+                    else if (stepNumber === 2) feedbackEl = document.getElementById('materialsFeedback');
+                    else if (stepNumber === 3) feedbackEl = document.getElementById('habitsFeedback');
+                    else if (stepNumber === 4) feedbackEl = document.getElementById('scoreFeedback');
+                    else if (stepNumber === 5) feedbackEl = document.getElementById('vfFeedback');
+
+                    if (feedbackEl && feedbackEl.style.display === 'block') {
+                        nextBtn.disabled = false;
+                    }
+                }
+            } // <-- ACCCOLADE MANQUANTE AJOUTÉE ICI
+
+            nextBtn.addEventListener('click', () => {
+                if (currentStep < totalSteps - 1) {
+                    currentStep++;
+                    if(currentStep === totalSteps - 1) {
+                        showResults();
+                    }
+                    showStep(currentStep);
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentStep > 0) {
+                    currentStep--;
+                    showStep(currentStep);
+                }
+            });
+
+            // --- FONCTION UTILITAIRE ---
+            function shuffleArray(arr) {
+                return [...arr].sort(() => Math.random() - 0.5);
+            }
+
+            // --- LOGIQUE DRAG & DROP (pour Mission 1 & 2) ---
+            let draggedItem = null;
+
+            function setupDragAndDrop(containerSelector, itemSelector) {
+                const containers = document.querySelectorAll(containerSelector);
+                
+                document.body.addEventListener('dragstart', e => {
+                    if (e.target.matches(itemSelector)) {
+                        draggedItem = e.target;
+                        setTimeout(() => e.target.classList.add('dragging'), 0);
+                    }
+                });
+
+                document.body.addEventListener('dragend', e => {
+                    if (e.target.matches(itemSelector)) {
+                        setTimeout(() => e.target.classList.remove('dragging'), 0);
+                        draggedItem = null;
+                    }
+                });
+
+                containers.forEach(container => {
+                    container.addEventListener('dragover', e => {
+                        e.preventDefault();
+                        container.classList.add('drag-over');
+                    });
+                    container.addEventListener('dragleave', () => {
+                        container.classList.remove('drag-over');
+                    });
+                    container.addEventListener('drop', e => {
+                        e.preventDefault();
+                        container.classList.remove('drag-over');
+                        if (draggedItem) {
+                            container.appendChild(draggedItem);
+                        }
+                    });
+                });
+            }
+
+            // --- MISSION 1: CYCLE DE VIE ---
+            function renderSteps() {
+                stepsContainer.innerHTML = '';
+                shuffleArray(stepsData).forEach(step => {
+                    const div = document.createElement('div');
+                    div.className = 'dnd-item';
+                    div.draggable = true;
+                    div.dataset.id = step.id;
+                    div.innerHTML = `
+                        <span><i class="fa-solid fa-bars" style="margin-right: 8px; color: #94a3b8; cursor: grab;"></i> ${step.label}</span>
+                    `;
+                    stepsContainer.appendChild(div);
+                });
+            }
+
+            document.getElementById('checkOrderBtn').addEventListener('click', () => {
+                const currentOrder = Array.from(stepsContainer.children).map(el => el.dataset.id);
+                const feedback = document.getElementById('orderFeedback');
+                
+                let isCorrect = currentOrder.every((id, index) => id === correctOrder[index]);
+
+                if (isCorrect) {
+                    scores.mission1 = 4; // Barème: 4 points
+                    feedback.className = 'feedback-box correct';
+                    feedback.innerHTML = `<strong>Score: +4 points.</strong> Bravo ! Vous avez trouvé l'ordre correct. La <strong>Fabrication</strong> et l'<strong>Extraction</strong> sont de loin les étapes les plus polluantes, bien plus que l'usage !`;
+                } else {
+                    scores.mission1 = 0;
+                    feedback.className = 'feedback-box incorrect';
+                    feedback.innerHTML = `<strong>Score: 0 points.</strong> Ce n'est pas tout à fait ça. L'ordre correct est : Fabrication, Extraction, Transport, Usage, Fin de vie. La fabrication est la plus polluante.`;
+                }
+                
+                feedback.style.display = 'block';
+                document.getElementById('checkOrderBtn').disabled = true;
+                nextBtn.disabled = false;
+            });
+
+
+            // --- MISSION 2: MATÉRIAUX ---
+            function renderMaterials() {
+                materialsPool.innerHTML = '<h3>Matériaux disponibles</h3>';
+                materialsSmartphone.innerHTML = '<h3>📱 Dans le smartphone</h3>';
+                
+                shuffleArray(materialsData).forEach(mat => {
+                    const div = document.createElement('div');
+                    div.className = 'dnd-item';
+                    div.draggable = true;
+                    div.dataset.id = mat.id;
+                    div.innerHTML = `<span><i class="fa-solid fa-bars" style="margin-right: 8px; color: #94a3b8; cursor: grab;"></i> ${mat.name}</span>`;
+                    materialsPool.appendChild(div);
+                });
+            }
+
+            document.getElementById('checkMaterialsBtn').addEventListener('click', () => {
+                const selectedIds = Array.from(materialsSmartphone.querySelectorAll('.dnd-item')).map(el => el.dataset.id);
+                const correctIds = materialsData.filter(m => m.inPhone).map(m => m.id);
+                const feedback = document.getElementById('materialsFeedback');
+
+                if (selectedIds.length !== 3) {
+                    feedback.className = 'feedback-box incorrect';
+                    feedback.innerHTML = `<strong>Attention :</strong> Vous devez glisser exactement 3 matériaux. Veuillez réessayer.`;
+                    feedback.style.display = 'block';
+                    return; // Ne pas valider tant qu'il n'y a pas 3 items
+                }
+                
+                const good = selectedIds.filter(id => correctIds.includes(id)).length;
+                const wrong = selectedIds.filter(id => !correctIds.includes(id)).length;
+                
+                scores.mission2 = good * 2; // 2 points par item correct
+
+                if (wrong > 0) {
+                    feedback.className = 'feedback-box incorrect';
+                    feedback.innerHTML = `<strong>Score: +${scores.mission2} points.</strong> Vous avez ${good} correct(s) et ${wrong} intrus. Les 8 corrects sont: Lithium, Cobalt, Cuivre, Or, Argent, Silicium, Aluminium, Plastique.`;
+                } else if (good === 0) {
+                    feedback.className = 'feedback-box incorrect';
+                     feedback.innerHTML = `<strong>Score: 0 points.</strong> Vous n'avez trouvé aucun matériau correct parmi vos 3 choix.`;
+                } else {
+                    feedback.className = 'feedback-box correct';
+                    feedback.innerHTML = `<strong>Score: +${scores.mission2} points.</strong> Bravo ! Vous avez trouvé ${good} matériaux corrects.`;
+                }
+
+                feedback.style.display = 'block';
+                document.getElementById('checkMaterialsBtn').disabled = true;
+                nextBtn.disabled = false;
+            });
+
+
+            // --- MISSION 3: ASSOCIATIONS ---
+            // --- MISSION 3: ASSOCIATIONS (Nouvelle version) ---
+            function renderHabits() {
+                habitsPool.innerHTML = '<h3>Pratiques à trier</h3>';
+                document.getElementById('goodHabitsBox').innerHTML = '<h3 style="color: var(--color-success);">👍 Bonnes Pratiques</h3>';
+                document.getElementById('badHabitsBox').innerHTML = '<h3 style="color: var(--color-danger);">👎 Mauvaises Pratiques</h3>';
+                
+                shuffleArray(habitsData).forEach(habit => {
+                    const div = document.createElement('div');
+                    div.className = 'dnd-item';
+                    div.draggable = true;
+                    div.dataset.id = habit.id;
+                    div.innerHTML = `<span><i class="fa-solid fa-bars" style="margin-right: 8px; color: #94a3b8; cursor: grab;"></i> ${habit.text}</span>`;
+                    habitsPool.appendChild(div);
+                });
+            }
+
+            document.getElementById('checkHabitsBtn').addEventListener('click', () => {
+                const goodDropped = document.querySelectorAll('#goodHabitsBox .dnd-item');
+                const badDropped = document.querySelectorAll('#badHabitsBox .dnd-item');
+                const stillInPool = document.querySelectorAll('#habitsPool .dnd-item');
+                const feedback = document.getElementById('habitsFeedback');
+
+                if (stillInPool.length > 0) {
+                    feedback.className = 'feedback-box incorrect';
+                    feedback.innerHTML = `<strong>Attention :</strong> Vous devez trier toutes les pratiques avant de vérifier.`;
+                    feedback.style.display = 'block';
+                    return;
+                }
+
+                let correctCount = 0;
+                
+                goodDropped.forEach(item => {
+                    const habit = habitsData.find(h => h.id === item.dataset.id);
+                    if (habit && habit.type === 'good') {
+                        correctCount++;
+                    }
+                });
+                
+                badDropped.forEach(item => {
+                    const habit = habitsData.find(h => h.id === item.dataset.id);
+                    if (habit && habit.type === 'bad') {
+                        correctCount++;
+                    }
+                });
+
+                scores.mission3 = correctCount; // 1 point par item bien placé
+                
+                if (correctCount === habitsData.length) {
+                    feedback.className = 'feedback-box correct';
+                    feedback.innerHTML = `<strong>Score: +${correctCount} points.</strong> Parfait ! Vous avez tout bien trié.`;
+                } else {
+                    feedback.className = 'feedback-box incorrect';
+                    feedback.innerHTML = `<strong>Score: +${correctCount} points.</strong> Vous avez ${correctCount} sur ${habitsData.length} pratiques bien triées.`;
+                }
+                
+                feedback.style.display = 'block';
+                document.getElementById('checkHabitsBtn').disabled = true;
+                nextBtn.disabled = false;
+            });
+
+
+            // --- MISSION 4: PROFIL (SANS POINTS) ---
+            function renderQuiz() {
+                quizContainer.innerHTML = '';
+                quizQuestions.forEach(q => {
+                    const div = document.createElement('div');
+                    div.className = 'quiz-question';
+                    div.innerHTML = `<p>${q.title}</p><div class="quiz-options" data-id="${q.id}">
+                        ${q.options.map(o => `<button class="quiz-option" data-score="${o.score}">${o.label}</button>`).join('')}
+                    </div>`;
+                    quizContainer.appendChild(div);
+                });
+
+                quizContainer.querySelectorAll('.quiz-option').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const parent = btn.closest('.quiz-options');
+                        parent.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                    });
+                });
+            }
+
+            document.getElementById('computeScoreBtn').addEventListener('click', () => {
+                let bonusScore = 0;
+                const selectedOptions = quizContainer.querySelectorAll('.quiz-option.selected');
+                const feedback = document.getElementById('scoreFeedback'); // Feedback box
+                
+                if (selectedOptions.length < quizQuestions.length) {
+                     // Remplacer l'alerte bloquante par un message dans le feedback
+                     feedback.className = 'feedback-box incorrect';
+                     feedback.innerHTML = 'Veuillez répondre à toutes les questions du profil.';
+                     feedback.style.display = 'block';
+                     return;
+                }
+
+                selectedOptions.forEach(opt => {
+                    bonusScore += parseInt(opt.dataset.score, 10);
+                });
+
+                // Le score max est 4 (2+2). 
+                // N'attribue PAS de points, affiche juste un message.
+                scores.mission4 = 0; // Explicitement 0 points
+                let bonusMessage = "";
+
+                if (bonusScore >= 4) {
+                    bonusMessage = "Profil très responsable ! Bravo !";
+                } else if (bonusScore >= 3) {
+                    bonusMessage = "Profil plutôt responsable.";
+                } else {
+                    bonusMessage = "Profil standard, avec des pistes d'amélioration.";
+                }
+
+                // const feedback = document.getElementById('scoreFeedback'); // Déjà défini plus haut
+                feedback.className = 'feedback-box info';
+                feedback.innerHTML = `<strong>Profil indicatif :</strong> ${bonusMessage} (Cette mission ne donne pas de points.)`;
+                
+                feedback.style.display = 'block';
+                document.getElementById('computeScoreBtn').disabled = true;
+                nextBtn.disabled = false;
+            });
+
+
+            // --- MISSION 5: VRAI/FAUX ---
+            function renderVf() {
+                vfContainer.innerHTML = '';
+                vfQuestions.forEach(q => {
+                    const div = document.createElement('div');
+                    div.className = 'quiz-question';
+                    div.dataset.correct = q.correct;
+                    div.innerHTML = `<p>${q.text}</p><div class="quiz-options">
+                        <button class="quiz-option" data-choice="vrai">Vrai</button>
+                        <button class="quiz-option" data-choice="faux">Faux</button>
+                    </div>`;
+                    vfContainer.appendChild(div);
+                });
+
+                vfContainer.querySelectorAll('.quiz-option').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const parent = btn.closest('.quiz-options');
+                        parent.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                    });
+                });
+            }
+
+             document.getElementById('checkVfBtn').addEventListener('click', () => {
+                const questions = vfContainer.querySelectorAll('.quiz-question');
+                let correctCount = 0;
+                
+                questions.forEach(q => {
+                    const selected = q.querySelector('.quiz-option.selected');
+                    if (selected) {
+                        const choice = selected.dataset.choice;
+                        const correct = q.dataset.correct;
+                        if (choice === correct) {
+                            correctCount++;
+                            selected.style.borderColor = 'var(--color-success)';
+                        } else {
+                            selected.style.borderColor = 'var(--color-danger)';
+                        }
+                        q.querySelectorAll('.quiz-option').forEach(b => b.style.pointerEvents = 'none');
+                    }
+                });
+
+                scores.mission5 = correctCount; // Barème: 1 pt par bonne réponse
+                const feedback = document.getElementById('vfFeedback');
+                
+                feedback.className = 'feedback-box info';
+                feedback.innerHTML = `<strong>Score: +${correctCount} points.</strong> Vous avez ${correctCount} sur ${vfQuestions.length} bonnes réponses.`;
+                
+                feedback.style.display = 'block';
+                document.getElementById('checkVfBtn').disabled = true;
+                nextBtn.disabled = false;
+            });
+
+
+            // --- RÉSULTATS FINAUX ---
+            function showResults() {
+                const mainScore = scores.mission1 + scores.mission2 + scores.mission3 + scores.mission5;
+                const bonus = scores.mission4;
+                const finalScoreWithBonus = mainScore + bonus;
+
+                document.getElementById('finalScore').textContent = mainScore;
+                document.getElementById('finalScore').nextElementSibling.textContent = ' / 20';
+                
+                let message = "";
+                if (mainScore >= 18) {
+                    message = "Excellent ! Vous êtes un expert du numérique responsable.";
+                } else if (mainScore >= 14) {
+                    message = "Très bon score ! Vous avez de très bonnes connaissances.";
+                } else if (mainScore >= 10) {
+                    message = "Pas mal ! Vous avez bien compris les enjeux principaux.";
+                } else {
+                    message = "Score en progression. Relisez les corrections pour tout retenir !";
+                }
+
+                let bonusMessage = "";
+                // scores.mission4 sera toujours 0, donc ce message ne s'affichera pas, ce qui est correct.
+                if (bonus > 0) {
+                    bonusMessage = ` <br>Vous avez aussi obtenu <strong>${bonus} points bonus</strong>, pour un total de <strong>${finalScoreWithBonus}</strong> !`;
+                }
+
+                document.getElementById('finalMessage').innerHTML = message + bonusMessage;
+
+                // Préparer l'impression
+                document.getElementById('printBtn').addEventListener('click', () => {
+                    window.print();
+                });
+            }
+
+
+            // --- INITIALISATION ---
+            function init() {
+                renderSteps();
+                renderMaterials();
+                renderHabits(); // <- Changé de renderPairs
+                renderQuiz();
+                renderVf();
+                setupDragAndDrop('.dnd-list', '.dnd-item');
+                showStep(currentStep);
+            }
+
+            init();
+        });
+    </script>
+</body>
+</html>
