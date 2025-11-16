@@ -365,6 +365,7 @@
                 background: #fff;
                 padding: 0;
                 margin: 0;
+                display: block; /* CORRECTION CLÉ : Annule le 'display: flex' */
             }
             .app {
                 box-shadow: none;
@@ -372,6 +373,7 @@
                 width: 100%;
                 max-width: 100%;
                 border-radius: 0;
+                overflow: visible !important; /* CORRECTION CLÉ : Révèle tout le contenu pour l'impression */
             }
             main {
                 padding: 0;
