@@ -200,8 +200,8 @@
             background-color: var(--color-danger-light);
             border-color: var(--color-danger);
             color: #991b1b;
-        }
-         .feedback-box.info {
+        } 
+        .feedback-box.info {
             background-color: var(--color-primary-light);
             border-color: var(--color-primary);
             color: #0c4a6e;
@@ -365,7 +365,7 @@
                 background: #fff;
                 padding: 0;
                 margin: 0;
-                display: block; /* CORRECTION CLÉ : Annule le 'display: flex' */
+                display: block;
             }
             .app {
                 box-shadow: none;
@@ -373,7 +373,7 @@
                 width: 100%;
                 max-width: 100%;
                 border-radius: 0;
-                overflow: visible !important; /* CORRECTION CLÉ : Révèle tout le contenu pour l'impression */
+                overflow: visible !important;
             }
             main {
                 padding: 0;
@@ -462,7 +462,7 @@
             <!-- Étape 2: Matériaux -->
             <div class="mission-step" data-mission="2">
                 <h2>Mission 2 : Matériaux cachés (sur 6 points)</h2>
-                <p>Parmi cette liste, glissez <strong>3 matériaux</strong> qu'on trouve VRAIMENT dans un smartphone dans la boîte "Dans le smartphone".</p>
+                <p>Parmi cette liste, glissez <strong>3 matériaux</strong> réellement présents dans un appareil vers la zone "Dans le smartphone".</p>
                 <div class="dnd-container" style="grid-template-columns: 1fr 1fr; gap: 16px;">
                     <div class="dnd-list" id="materialsPool">
                         <h3>Matériaux disponibles</h3>
@@ -513,8 +513,8 @@
                 </div>
                 <button class="btn btn-check" id="computeScoreBtn">
                     <i class="fa-solid fa-calculator"></i> Calculer mon profil
-                </button>
-                 <div class="feedback-box" id="scoreFeedback"></div>
+                </button> 
+                <div class="feedback-box" id="scoreFeedback"></div>
             </div>
 
             <!-- Étape 5: Vrai/Faux -->
@@ -590,15 +590,15 @@
             // Mission 2
             const materialsData = [
                 { id: 'lithium', name: 'Lithium', inPhone: true },
-                { id: 'cobalt', name: 'Cobalt', inPhone: true },
-                { id: 'cuivre', name: 'Cuivre', inPhone: true },
                 { id: 'or', name: 'Or', inPhone: true },
-                { id: 'argent', name: 'Argent', inPhone: true },
+                { id: 'cuivre', name: 'Cuivre', inPhone: true },
                 { id: 'silicium', name: 'Silicium', inPhone: true },
-                { id: 'aluminium', name: 'Aluminium', inPhone: true },
                 { id: 'plastique', name: 'Plastique', inPhone: true },
-                { id: 'fer', name: 'Fer', inPhone: false },
-                { id: 'plomb', name: 'Plomb', inPhone: false }
+                { id: 'mercure', name: 'Mercure', inPhone: false },
+                { id: 'uranium', name: 'Uranium', inPhone: false },
+                { id: 'amiante', name: 'Amiante', inPhone: false },
+                { id: 'gazole', name: 'Gazole', inPhone: false },
+                { id: 'latex', name: 'Latex', inPhone: false }
             ];
             const materialsPool = document.getElementById('materialsPool');
             const materialsSmartphone = document.getElementById('materialsSmartphone');
@@ -811,6 +811,14 @@
                     return; // Ne pas valider tant qu'il n'y a pas 3 items
                 }
                 
+                // Verrouiller les éléments pour empêcher de recommencer
+                const allMission2Items = document.querySelectorAll('#materialsPool .dnd-item, #materialsSmartphone .dnd-item');
+                allMission2Items.forEach(item => {
+                    item.draggable = false;
+                    item.style.cursor = 'default';
+                    item.style.opacity = '0.7';
+                });
+
                 const good = selectedIds.filter(id => correctIds.includes(id)).length;
                 const wrong = selectedIds.filter(id => !correctIds.includes(id)).length;
                 
@@ -818,10 +826,10 @@
 
                 if (wrong > 0) {
                     feedback.className = 'feedback-box incorrect';
-                    feedback.innerHTML = `<strong>Score: +${scores.mission2} points.</strong> Vous avez ${good} correct(s) et ${wrong} intrus. Les 8 corrects sont: Lithium, Cobalt, Cuivre, Or, Argent, Silicium, Aluminium, Plastique.`;
+                    feedback.innerHTML = `<strong>Score: +${scores.mission2} points.</strong> Vous avez ${good} correct(s) et ${wrong} intrus. Les matériaux corrects étaient : Lithium, Or, Cuivre, Silicium, Plastique.`;
                 } else if (good === 0) {
-                    feedback.className = 'feedback-box incorrect';
-                     feedback.innerHTML = `<strong>Score: 0 points.</strong> Vous n'avez trouvé aucun matériau correct parmi vos 3 choix.`;
+                    feedback.className = 'feedback-box incorrect'; 
+                    feedback.innerHTML = `<strong>Score: 0 points.</strong> Vous n'avez trouvé aucun matériau correct parmi vos 3 choix.`;
                 } else {
                     feedback.className = 'feedback-box correct';
                     feedback.innerHTML = `<strong>Score: +${scores.mission2} points.</strong> Bravo ! Vous avez trouvé ${good} matériaux corrects.`;
@@ -862,6 +870,14 @@
                     feedback.style.display = 'block';
                     return;
                 }
+
+                // Verrouiller les éléments pour empêcher de recommencer
+                const allMission3Items = document.querySelectorAll('#goodHabitsBox .dnd-item, #badHabitsBox .dnd-item');
+                allMission3Items.forEach(item => {
+                    item.draggable = false;
+                    item.style.cursor = 'default';
+                    item.style.opacity = '0.7';
+                });
 
                 let correctCount = 0;
                 
@@ -921,7 +937,7 @@
                 const selectedOptions = quizContainer.querySelectorAll('.quiz-option.selected');
                 const feedback = document.getElementById('scoreFeedback'); // Feedback box
                 
-                if (selectedOptions.length < quizQuestions.length) {
+                if (selectedOptions.length < quizQuestions.length) { 
                      // Remplacer l'alerte bloquante par un message dans le feedback
                      feedback.className = 'feedback-box incorrect';
                      feedback.innerHTML = 'Veuillez répondre à toutes les questions du profil.';
@@ -1043,7 +1059,6 @@
                     window.print();
                 });
             }
-
 
             // --- INITIALISATION ---
             function init() {
